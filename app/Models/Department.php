@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Department extends Model
 {
-    protected $fillable = ['name', 'description'];
+    protected $fillable = ['name', 'description', 'office_location_id'];
 
     public function employees()
     {
@@ -16,5 +16,10 @@ class Department extends Model
     public function positions()
     {
         return $this->hasMany(Position::class);
+    }
+
+    public function officeLocation()
+    {
+        return $this->belongsTo(OfficeLocation::class);
     }
 }

@@ -55,6 +55,11 @@ Route::middleware(['auth', 'verified', 'role:1'])->group(function () {
 
     // Leaves
     Route::resource('leaves', LeaveController::class);
+
+    // Office Locations
+    Route::get('office-locations/{office_location}/assign', [\App\Http\Controllers\OfficeLocationController::class, 'assign'])->name('office-locations.assign');
+    Route::post('office-locations/{office_location}/assign', [\App\Http\Controllers\OfficeLocationController::class, 'storeAssign'])->name('office-locations.storeAssign');
+    Route::resource('office-locations', \App\Http\Controllers\OfficeLocationController::class);
 });
 
 
