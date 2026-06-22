@@ -28,7 +28,10 @@ class UserAttendanceController extends Controller
             ->orderBy('date', 'desc')
             ->get();
 
-        return view('userAttendance.index', compact('todayAttendance', 'monthlyAttendance'));
+        // Ambil lokasi
+        $officeLocation = $employee->officeLocation ?? $employee->department->officeLocation ?? \App\Models\OfficeLocation::where('is_default', true)->first() ?? \App\Models\OfficeLocation::first();
+
+        return view('userAttendance.index', compact('todayAttendance', 'monthlyAttendance', 'officeLocation', 'employee'));
     }
 
     /**

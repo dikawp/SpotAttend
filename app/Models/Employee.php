@@ -26,6 +26,7 @@ class Employee extends Model
         'schedule_end_time',
         'annual_leave_days',
         'contract_type',
+        'office_location_id',
     ];
 
     public function user()
@@ -46,5 +47,10 @@ class Employee extends Model
     public function attendances()
     {
         return $this->hasMany(Attendance::class);
+    }
+
+    public function officeLocation()
+    {
+        return $this->belongsTo(OfficeLocation::class);
     }
 }

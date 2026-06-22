@@ -41,9 +41,10 @@
                     'departments.*',
                     'holidays.*',
                     'attendances.*',
+                    'office-locations.*',
                     'leaves.*',
                 );
-                $isAttendanceMenuActive = request()->routeIs('attendances.*');
+                $isAttendanceMenuActive = request()->routeIs('attendances.*', 'office-locations.*');
             @endphp
 
             <li class="relative px-6 py-3" x-data="{ isOpen: @json($isHrMenuActive) }">
@@ -114,7 +115,7 @@
 
                         {{-- Attendance submenu --}}
                         <ul x-show="isOpen" x-collapse class="ms-5 space-y-2">
-                            @foreach ([['route' => 'attendances.monitor', 'label' => 'Monitoring'], ['route' => 'attendances.index', 'label' => 'Attendance (HR)']] as $item)
+                            @foreach ([['route' => 'attendances.monitor', 'label' => 'Monitoring'], ['route' => 'attendances.index', 'label' => 'Attendance (HR)'], ['route' => 'office-locations.index', 'label' => 'Locations']] as $item)
                                 <li>
                                     <a href="{{ route($item['route']) }}" @class([
                                         'flex items-center gap-2 px-3 py-2 rounded-md transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200',

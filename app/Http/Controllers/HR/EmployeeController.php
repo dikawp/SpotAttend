@@ -7,6 +7,7 @@ use App\Models\Department;
 use App\Models\Employee;
 use App\Models\Position;
 use App\Models\User;
+use App\Models\OfficeLocation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -59,8 +60,9 @@ class EmployeeController extends Controller
     {
         $departments = Department::orderBy('name')->get();
         $positions = Position::orderBy('name')->get();
+        $locations = OfficeLocation::all();
 
-        return view('hr.employees.create', compact('departments', 'positions'));
+        return view('hr.employees.create', compact('departments', 'positions', 'locations'));
     }
 
     /**
@@ -128,8 +130,9 @@ class EmployeeController extends Controller
         $employee = Employee::with(['user'])->findOrFail($id);
         $departments = Department::orderBy('name')->get();
         $positions = Position::orderBy('name')->get();
+        $locations = OfficeLocation::all();
 
-        return view('hr.employees.edit', compact('employee', 'departments', 'positions'));
+        return view('hr.employees.edit', compact('employee', 'departments', 'positions', 'locations'));
     }
 
     /**
@@ -220,6 +223,7 @@ class EmployeeController extends Controller
             'schedule_end_time' => 'required|date_format:H:i',
             'contract_type' => ['required', 'integer', Rule::in([0, 1, 2])],
             'annual_leave_days' => 'nullable|integer',
+            'office_location_id' => 'nullable|exists:office_locations,id',
         ]);
     }
 
@@ -243,6 +247,7 @@ class EmployeeController extends Controller
             'schedule_end_time' => $validated['schedule_end_time'],
             'contract_type' => $validated['contract_type'],
             'annual_leave_days' => $validated['annual_leave_days'],
+            'office_location_id' => $validated['office_location_id'] ?? null,
         ];
     }
 

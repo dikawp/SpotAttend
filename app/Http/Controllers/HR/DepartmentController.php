@@ -5,6 +5,7 @@ namespace App\Http\Controllers\HR;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\Position;
+use App\Models\OfficeLocation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -42,7 +43,8 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        return view('hr.departments.create');
+        $locations = OfficeLocation::all();
+        return view('hr.departments.create', compact('locations'));
     }
 
     /**
@@ -54,6 +56,7 @@ class DepartmentController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:departments,name',
             'description' => 'nullable|string',
+            'office_location_id' => 'nullable|exists:office_locations,id',
             'positions' => 'nullable|array', //
             'positions.*.name' => 'required|string|max:255',
             'positions.*.job_description' => 'nullable|string',
@@ -65,6 +68,7 @@ class DepartmentController extends Controller
             $department = Department::create([
                 'name' => $validated['name'],
                 'description' => $validated['description'],
+                'office_location_id' => $validated['office_location_id'] ?? null,
             ]);
 
             // Positions
@@ -101,8 +105,9 @@ class DepartmentController extends Controller
     public function edit(string $id)
     {
         $department = Department::findOrFail($id);
+        $locations = OfficeLocation::all();
 
-        return view('hr.departments.edit', compact('department'));
+        return view('hr.departments.edit', compact('department', 'locations'));
     }
 
     /**
@@ -115,6 +120,7 @@ class DepartmentController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:departments,name,' . $id,
             'description' => 'nullable|string',
+            'office_location_id' => 'nullable|exists:office_locations,id',
             'positions' => 'nullable|array',
             'positions.*.id' => 'nullable|integer|exists:positions,id',
             'positions.*.name' => 'required_with:positions.*.id|string|max:255',
@@ -127,6 +133,7 @@ class DepartmentController extends Controller
             $department->update([
                 'name' => $validated['name'],
                 'description' => $validated['description'],
+                'office_location_id' => $validated['office_location_id'] ?? null,
             ]);
 
             $existingPositionIds = $department->positions()->pluck('id')->toArray();

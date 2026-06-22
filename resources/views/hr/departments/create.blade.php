@@ -41,6 +41,15 @@
                         <textarea name="description" id="description" rows="3" placeholder="Describe the department's role..."
                             class="mt-1 block w-full rounded-lg border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 p-2.5">{{ old('description') }}</textarea>
                     </div>
+                    <div>
+                        <label for="office_location_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Office Location (Optional)</label>
+                        <select name="office_location_id" id="office_location_id" class="mt-1 block w-full rounded-lg border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 p-2.5">
+                            <option value="">-- None --</option>
+                            @foreach ($locations as $loc)
+                                <option value="{{ $loc->id }}" {{ old('office_location_id') == $loc->id ? 'selected' : '' }}>{{ $loc->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
             </div>
 

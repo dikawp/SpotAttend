@@ -35,12 +35,12 @@
             @include('layouts.components.sidebar-content')
         </aside>
 
-        <div class="flex flex-col flex-1 w-full">
+        <div class="flex flex-col flex-1 w-full overflow-hidden">
             <!-- Navbar -->
             @include('layouts.components.navbar')
 
             <!-- Page Content -->
-            <main class="pb-16 overflow-y-auto">
+            <main class="h-full overflow-y-auto pb-16 flex-1">
                 <div class="container grid px-6 mx-auto">
                     <!-- Page Heading -->
                     @hasSection('header')

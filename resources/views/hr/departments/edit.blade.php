@@ -39,6 +39,15 @@
                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
                         <textarea name="description" id="description" rows="3" class="mt-1 block w-full rounded-lg p-2.5">{{ old('description', $department->description) }}</textarea>
                     </div>
+                    <div>
+                        <label for="office_location_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Office Location (Optional)</label>
+                        <select name="office_location_id" id="office_location_id" class="mt-1 block w-full rounded-lg p-2.5">
+                            <option value="">-- None --</option>
+                            @foreach ($locations as $loc)
+                                <option value="{{ $loc->id }}" {{ old('office_location_id', $department->office_location_id) == $loc->id ? 'selected' : '' }}>{{ $loc->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
             </div>
 
