@@ -28,6 +28,10 @@ class OfficeLocationController extends Controller
         ]);
         
         $validated['is_default'] = $request->has('is_default');
+        
+        if (OfficeLocation::count() === 0) {
+            $validated['is_default'] = true;
+        }
 
         if ($validated['is_default']) {
             OfficeLocation::query()->update(['is_default' => false]);

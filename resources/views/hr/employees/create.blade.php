@@ -111,14 +111,18 @@
                                 class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-shadow duration-200">
                         </div>
 
+                        @if(auth()->user()->role == 2)
                         <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Email Address <span class="text-red-500">*</span>
+                            <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                System Role <span class="text-red-500">*</span>
                             </label>
-                            <input type="email" id="email" name="email" value="{{ old('email') }}" required
-                                placeholder="employee@example.com"
-                                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-shadow duration-200">
+                            <select id="role" name="role" required
+                                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-shadow duration-200">
+                                <option value="0" {{ old('role') == '0' ? 'selected' : '' }}>Employee (Role 0)</option>
+                                <option value="1" {{ old('role') == '1' ? 'selected' : '' }}>HR Admin (Role 1)</option>
+                            </select>
                         </div>
+                        @endif
 
                         <div class="md:col-span-2">
                             <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -161,9 +165,9 @@
 
                         <div>
                             <label for="nik" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                NIK (ID Number)
+                                NIK (ID Number) <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" id="nik" name="nik" value="{{ old('nik') }}"
+                            <input type="text" id="nik" name="nik" value="{{ old('nik') }}" required
                                 placeholder="3578xxxxxxxxxxxx"
                                 class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-shadow duration-200">
                         </div>

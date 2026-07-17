@@ -13,6 +13,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // 2: Superadmin
+        User::create([
+            'name' => 'Superadmin',
+            'email' => 'superadmin@spotattend.com',
+            'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            'role' => 2,
+        ]);
+
+        // 1: HR
+        User::create([
+            'name' => 'HR Manager',
+            'email' => 'admin@spotattend.com',
+            'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            'role' => 1,
+        ]);
+
         $this->call([
             DepartmentSeeder::class,
             PositionSeeder::class,
