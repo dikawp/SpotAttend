@@ -1,15 +1,18 @@
 <nav class="py-4 text-gray-500 dark:text-gray-400">
     {{-- Logo --}}
     <a href="" class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200 flex items-center">
-        <svg class="w-8 h-8 me-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-                d="M4 4h4v4H4zM4 10h4v4H4zM4 16h4v4H4zM10 4h4v4h-4zM10 10h4v4h-4zM10 16h4v4h-4zM16 4h4v4h-4zM16 10h4v4h-4zM16 16h4v4h-4z" />
-        </svg>
-        <span>HRIS GABUT</span>
+        <img src="{{ asset('logo_s.png') }}" class="w-8 h-8 me-2" alt="Logo">
+        <span>SpotAttend</span>
     </a>
 
     @php
-        $dashboardRouteName = auth()->user()->role === 1 ? 'hr.dashboard' : 'dashboard';
+        if (auth()->user()->role === 2) {
+            $dashboardRouteName = 'superadmin.index';
+        } elseif (auth()->user()->role === 1) {
+            $dashboardRouteName = 'hr.dashboard';
+        } else {
+            $dashboardRouteName = 'dashboard';
+        }
         $dashboardRouteUrl = route($dashboardRouteName);
     @endphp
 
@@ -34,7 +37,7 @@
         </li>
 
         {{-- Admin Menu --}}
-        @if (auth()->user()->role === 1)
+        @if (in_array(auth()->user()->role, [1, 2]))
             @php
                 $isHrMenuActive = request()->routeIs(
                     'employees.*',

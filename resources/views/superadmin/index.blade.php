@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'HR Dashboard')
+@section('title', 'Superadmin Dashboard')
 @section('content')
     <div class="bg-gray-100 dark:bg-gray-900 min-h-screen">
 
@@ -8,6 +8,12 @@
             <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Dashboard</h1>
             <p class="text-gray-600 dark:text-gray-400 mt-1">Welcome back, {{ $userName }}! Here is a summary of today's activities.</p>
         </div>
+
+        @if(session('success'))
+            <div class="mb-4 p-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
 
         <!-- Statistics Summary (KPI Cards) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -78,8 +84,54 @@
 
         <!-- Main Content (2 columns) -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Left Column: Announcements & Employee List -->
+            <!-- Left Column: Announcements & Employee List & HR Accounts -->
             <div class="lg:col-span-2 space-y-8">
+
+                <!-- Daftar Akun HR -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+                    <div class="flex justify-between items-center mb-6 border-b border-gray-200 dark:border-gray-700 pb-4">
+                        <h2 class="text-xl font-semibold text-gray-800 dark:text-white">HR Accounts List</h2>
+                        <a href="{{ route('superadmin.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                            Add HR Account
+                        </a>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">Name</th>
+                                    <th scope="col" class="px-6 py-3">Email</th>
+                                    <th scope="col" class="px-6 py-3">Created At</th>
+                                    <th scope="col" class="px-6 py-3 text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($hrs as $hr)
+                                    <tr class="bg-white dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{ $hr->name }}
+                                        </td>
+                                        <td class="px-6 py-4">{{ $hr->email }}</td>
+                                        <td class="px-6 py-4">{{ $hr->created_at->format('d M Y') }}</td>
+                                        <td class="px-6 py-4 text-center">
+                                            <a href="{{ route('superadmin.edit', $hr) }}" class="text-blue-600 hover:underline mr-3">Edit</a>
+                                            <form action="{{ route('superadmin.destroy', $hr) }}" method="POST" class="inline-block" onsubmit="return confirm('Delete this account?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-600 hover:underline">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">No HR accounts found.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
                 <!-- Leave Request List -->
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md">
@@ -96,6 +148,7 @@
                                     <th scope="col" class="px-6 py-3 text-center">Action</th>
                                 </tr>
                             </thead>
+                            <tbody>
                                 @forelse($latestLeaveRequests as $leave)
                                     <tr class="bg-white dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">

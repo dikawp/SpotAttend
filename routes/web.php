@@ -13,7 +13,7 @@ use App\Http\Controllers\UserLeaveController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 
@@ -32,11 +32,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('my-leaves', UserLeaveController::class);
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [\App\Http\Controllers\EmployeeDashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
-Route::middleware(['auth', 'verified', 'role:1'])->group(function () {
+Route::middleware(['auth', 'verified', 'role:2'])->group(function () {
+    Route::resource('superadmin', \App\Http\Controllers\SuperadminController::class)->except(['show']);
+});
+
+Route::middleware(['auth', 'verified', 'role:1,2'])->group(function () {
     Route::get('/hr/dashboard', [DashboardController::class, 'index'])->name('hr.dashboard');
 
     // Departments

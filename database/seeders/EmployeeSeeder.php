@@ -20,6 +20,34 @@ class EmployeeSeeder extends Seeder
         $departments = Department::all();
         $positions = Position::all();
 
+        // Demo Employee
+        $demoDepartment = $departments->random();
+        $demoPositions = $positions->where('department_id', $demoDepartment->id);
+        $demoPosition = $demoPositions->isNotEmpty() ? $demoPositions->random() : $positions->random();
+
+        $demoUser = User::create([
+            'name' => 'Karyawan Demo',
+            'email' => 'karyawan@spotattend.com',
+            'password' => Hash::make('password'),
+            'role' => 0,
+        ]);
+
+        Employee::create([
+            'user_id'        => $demoUser->id,
+            'nik'            => 'DEMO001',
+            'full_name'      => $demoUser->name,
+            'place_of_birth' => 'Jakarta',
+            'date_of_birth'  => '1995-01-01',
+            'gender'         => 'Male',
+            'marital_status' => 'Single',
+            'address'        => 'Jl. Demo No. 1',
+            'phone_number'   => '081234567890',
+            'hire_date'      => '2023-01-01',
+            'position_id'    => $demoPosition->id,
+            'department_id'  => $demoDepartment->id,
+            'photo'          => null,
+        ]);
+
         for ($i = 1; $i <= 12; $i++) {
             $department = $departments->random();
             $availablePositions = $positions->where('department_id', $department->id);

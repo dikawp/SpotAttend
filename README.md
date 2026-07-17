@@ -1,61 +1,114 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SpotAttend
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+SpotAttend is an internal Human Resource Information System (HRIS) designed to streamline employee management, attendance tracking, and leave requests. 
 
-## About Laravel
+This application uses Laravel 11, Tailwind CSS, and Alpine.js, providing a fast, responsive, and modern user experience.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🚀 Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+*   **Role-Based Access Control:**
+    *   **Superadmin (Role 2):** Can manage HR accounts (Create, Edit, Delete). Has an overview of the entire system.
+    *   **HR Admin (Role 1):** Full access to manage employees, departments, office locations, holidays, and approve/reject leave requests. Can also monitor company-wide attendance.
+    *   **Employee (Role 0):** Can check in and out for attendance, view their own attendance history, submit leave requests, and see upcoming company holidays.
+*   **Attendance Management:** Clock in / clock out with lateness and overtime calculation based on employee schedules.
+*   **Leave Management:** Submit leave requests with reason and dates. HR can approve or reject these requests.
+*   **Office Locations & Departments:** Flexible management of company structure.
+*   **Modern UI:** A clean, responsive, and intuitive interface with Dark Mode support.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🛠️ Prerequisites
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Before you begin, ensure you have met the following requirements:
+*   **PHP:** 8.2 or higher
+*   **Composer:** Installed and accessible globally
+*   **Node.js & NPM:** Installed (for compiling frontend assets)
+*   **Database:** MySQL or PostgreSQL (MySQL recommended)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## ⚙️ Installation & Setup Guide
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Follow these steps to get your development environment running:
 
-### Premium Partners
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd SpotAttend
+   ```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+2. **Install PHP dependencies:**
+   ```bash
+   composer install
+   ```
 
-## Contributing
+3. **Install NPM dependencies:**
+   ```bash
+   npm install
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+4. **Environment Setup:**
+   Copy the example environment file and configure your database settings.
+   ```bash
+   cp .env.example .env
+   ```
+   Open `.env` and set your database connection details (e.g., `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`).
 
-## Code of Conduct
+5. **Generate Application Key:**
+   ```bash
+   php artisan key:generate
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+6. **Run Migrations and Seeders:**
+   This step will create all necessary database tables and populate the database with default accounts and sample data.
+   ```bash
+   php artisan migrate:fresh --seed
+   ```
 
-## Security Vulnerabilities
+7. **Link Storage (For Profile Photos):**
+   ```bash
+   php artisan storage:link
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+8. **Build Frontend Assets:**
+   ```bash
+   npm run build
+   # Or for development with hot-reloading: npm run dev
+   ```
 
-## License
+9. **Start the Development Server:**
+   ```bash
+   php artisan serve
+   ```
+   The application will be accessible at `http://localhost:8000`.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## 🔐 Default Accounts
+
+If you ran the database seeder (`php artisan db:seed`), the following default accounts are available for testing:
+
+**Superadmin:**
+*   **Email:** `superadmin@spotattend.com`
+*   **Password:** `password`
+
+**HR Admin:**
+*   **Email:** `admin@spotattend.com`
+*   **Password:** `password`
+
+**Employee (Sample):**
+*   **Email:** `karyawan@spotattend.com`
+*   **Password:** `password`
+
+> **Note:** The seeder may generate additional random employee accounts using Faker. You can find their credentials in your local database.
+
+---
+
+## 🧑‍💻 Usage Flow
+
+1. **Initial Setup:** Log in as **Superadmin** if you need to create additional HR Admin accounts.
+2. **HR Operations:** Log in as **HR Admin** (`admin@spotattend.com`) to set up Office Locations, Departments, and register new Employees. *Note: Employees cannot register themselves.*
+3. **Employee Daily Use:** Employees log in using the credentials provided by HR to mark their daily attendance (Check-in/Check-out) and request leaves.
+

@@ -28,7 +28,7 @@ class EmployeeController extends Controller
 
         // Query 
         $employees = Employee::with(['user', 'department', 'position'])
-            ->whereHas('user', fn($q) => $q->where('role', 0))
+            ->whereHas('user', fn($q) => $q->whereIn('role', [0, 1]))
             ->when($search, function ($q) use ($search) {
                 $term = "%{$search}%";
                 $q->where(function ($sub) use ($term) {
@@ -76,11 +76,14 @@ class EmployeeController extends Controller
         try {
             DB::beginTransaction();
 
+            $userEmail = $request->email ?? ($validated['nik'] . '@hris.local');
+
+            $userRole = (auth()->user()->role === 2 && isset($validated['role'])) ? $validated['role'] : 0;
             $user = User::create([
                 'name' => $validated['name'],
-                'email' => $validated['email'],
+                'email' => $userEmail,
                 'password' => Hash::make($validated['password']),
-                'role' => 0, // default user
+                'role' => $userRole, // assigned role or default user
             ]);
 
             $photoPath = $this->handlePhotoUpload($request);
@@ -143,12 +146,19 @@ class EmployeeController extends Controller
         $employee = Employee::findOrFail($id);
         $validated = $this->validateEmployee($request, $employee);
 
-        // Update user
+        $userEmail = $request->email ?? ($validated['nik'] . '@hris.local');
+
         $user = $employee->user;
-        $user->fill([
+        $userFillData = [
             'name' => $validated['name'],
-            'email' => $validated['email'],
-        ]);
+            'email' => $userEmail,
+        ];
+        
+        if (auth()->user()->role === 2 && isset($validated['role'])) {
+            $userFillData['role'] = $validated['role'];
+        }
+
+        $user->fill($userFillData);
 
         if (!empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
@@ -199,12 +209,13 @@ class EmployeeController extends Controller
         return $request->validate([
             // User Info
             'name' => 'required|string|max:255',
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($userId)],
+            'email' => ['nullable', 'string', 'email', 'max:255', Rule::unique('users')->ignore($userId)],
             'password' => $employee ? 'nullable|string|min:8' : 'required|string|min:8',
+            'role' => 'nullable|integer|in:0,1',
 
             // Personal Info
             'full_name' => 'required|string|max:255',
-            'nik' => ['nullable', 'string', 'max:50', Rule::unique('employees')->ignore($employeeId)],
+            'nik' => ['required', 'string', 'max:50', Rule::unique('employees')->ignore($employeeId)],
             'phone_number' => ['nullable', 'string', 'max:20', Rule::unique('employees')->ignore($employeeId)],
             'bank' => 'nullable|string|max:50',
             'emergency' => 'nullable|string|max:20',

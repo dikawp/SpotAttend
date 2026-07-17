@@ -25,7 +25,16 @@
         @endif
 
         {{-- Logika Tombol Check-in/Check-out --}}
-        <div id="location-status" class="p-4 mb-4 text-sm text-yellow-700 bg-yellow-100 rounded-lg dark:bg-yellow-200 dark:text-yellow-800" role="alert">
+        @if(!$officeLocation)
+            <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">
+                <div class="flex items-center font-semibold mb-1">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                    Warning: Office Location Not Set!
+                </div>
+                The office location has not been configured by HR/Admin. You cannot check in yet. Please contact the HR team.
+            </div>
+        @else
+            <div id="location-status" class="p-4 mb-4 text-sm text-yellow-700 bg-yellow-100 rounded-lg dark:bg-yellow-200 dark:text-yellow-800" role="alert">
             Getting your location... Please allow location access.
         </div>
 
@@ -80,6 +89,7 @@
             <p>Check In: {{ \Carbon\Carbon::parse($todayAttendance->check_in)->format('H:i') }} | Check Out:
                 {{ \Carbon\Carbon::parse($todayAttendance->check_out)->format('H:i') }}</p>
         @endif
+        @endif
     </div>
 
     {{-- Riwayat Absensi Bulan Ini --}}
@@ -94,14 +104,8 @@
                 const officeLat = {{ $officeLocation->latitude }};
                 const officeLng = {{ $officeLocation->longitude }};
                 const maxDistance = {{ $officeLocation->radius }}; // Radius maksimal dalam meter
-            @else
-                // Fallback location if none is set
-                const officeLat = -6.2088;
-                const officeLng = 106.8456;
-                const maxDistance = 100; // Radius maksimal dalam meter (misal: 100 meter)
-            @endif
 
-            const map = L.map('map').setView([officeLat, officeLng], 15);
+                const map = L.map('map').setView([officeLat, officeLng], 15);
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
@@ -171,6 +175,7 @@
                     enableHighAccuracy: true
                 }
             );
+            @endif
         });
     </script>
 @endpush
