@@ -35,7 +35,7 @@ Follow these steps to get your development environment running:
 
 1. **Clone the repository:**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/dikawp/SpotAttend.git
    cd SpotAttend
    ```
 
